@@ -7,7 +7,9 @@
     <Company>Wil Stead</Company>
     <Description>A general-purpose scripting language implemented in C#</Description>
     <Copyright>Wil Stead</Copyright>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageLicenseUrl>https://github.com/WilStead/WJScript/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/WilStead/WJScript</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
