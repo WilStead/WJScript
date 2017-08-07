@@ -13,9 +13,7 @@ In order to help implement this desired behavior, WJScript is an unusual languag
 Does your script add a boolean and a number, and divide the result by a string? Well, that isn't likely to generate very helpful results ... but it *will* compile, and run without errors!
 
 ## How do I get this?
-NuGet package coming soon....
-
-In the meantime fork, clone, and build the source. It's quite small and straightforward.
+Available as a [NuGet package](https://www.nuget.org/packages/WJScriptParser).
 
 ## Credit
 The WJScript parser was based on [this article](http://www.codemag.com/article/1607081) by Vassili Kaplan, with many modifications.
