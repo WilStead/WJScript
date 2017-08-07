@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <Version>0.1.0</Version>
+    <Authors>Wil Stead</Authors>
+    <Company>Wil Stead</Company>
+    <Description>A general-purpose scripting language implemented in C#</Description>
+    <Copyright>Wil Stead</Copyright>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.3.1" />
+  </ItemGroup>
+
+</Project>
