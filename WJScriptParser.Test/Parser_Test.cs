@@ -8,7 +8,7 @@ namespace WJScriptParser.Test
         public class TestArgClass
         {
             public int X;
-            public int Y;
+            public int Y { get; set; }
         }
 
         [TestMethod]

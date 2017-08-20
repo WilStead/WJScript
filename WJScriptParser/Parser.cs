@@ -30,9 +30,11 @@ namespace WJScriptParser
             }
             else
             {
+                var addedImports = args.Select(a => a.GetType().Namespace).Distinct();
+                var addedAssemblies = args.Select(a => a.GetType().GetTypeInfo().Assembly).Distinct();
                 var globals = new DynamicGlobals { args = args.Select(a => new let(a)).ToArray() };
 
-                result = await EvaluateAsync(source, globals);
+                result = await EvaluateAsync(source, globals, addedImports, addedAssemblies);
 
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -57,7 +59,8 @@ namespace WJScriptParser
                                     var argField = type.GetRuntimeField(prop.Key);
                                     if (argField == null)
                                     {
-                                        type.GetRuntimeProperty(prop.Key).SetValue(args[i], prop.Value);
+                                        var argProperty = type.GetRuntimeProperty(prop.Key);
+                                        argProperty.SetValue(args[i], prop.Value);
                                     }
                                     else
                                     {
@@ -80,25 +83,33 @@ namespace WJScriptParser
             }
         }
 
-        private static async Task<object> EvaluateAsync(string source, object globals = null)
+        private static async Task<object> EvaluateAsync(
+            string source,
+            object globals = null,
+            IEnumerable<string> addedImports = null,
+            IEnumerable<Assembly> addedAssemblies = null)
         {
+            var imports = new List<string> { "System.Collections.Generic", "System.Linq", "System.Text", "UniversalVariable", "UniversalVariable.Math" };
+            var assemblies = new List<Assembly>
+            {
+                typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).GetTypeInfo().Assembly,
+                typeof(let).GetTypeInfo().Assembly
+            };
             try
             {
                 if (globals == null)
                 {
                     return await CSharpScript.EvaluateAsync(
                         source,
-                        ScriptOptions.Default
-                            .WithImports("System.Collections.Generic", "System.Linq", "System.Text", "UniversalVariable", "UniversalVariable.Math")
-                            .WithReferences(typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).GetTypeInfo().Assembly, typeof(let).GetTypeInfo().Assembly));
+                        ScriptOptions.Default.WithImports(imports).WithReferences(assemblies.ToArray()));
                 }
                 else
                 {
+                    imports = imports.Concat(addedImports).ToList();
+                    assemblies = assemblies.Concat(addedAssemblies).ToList();
                     return await CSharpScript.EvaluateAsync(
                         source,
-                        ScriptOptions.Default
-                            .WithImports("System.Collections.Generic", "System.Linq", "System.Text", "UniversalVariable", "UniversalVariable.Math")
-                            .WithReferences(typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException).GetTypeInfo().Assembly, typeof(let).GetTypeInfo().Assembly),
+                        ScriptOptions.Default.WithImports(imports).WithReferences(assemblies.ToArray()),
                         globals, typeof(DynamicGlobals));
                 }
             }
