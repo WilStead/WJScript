@@ -12,7 +12,7 @@ namespace WJScriptParser
 {
     public static class Parser
     {
-        public class DynamicGlobals { public let[] args; }
+        public class DynamicGlobals { public object[] args; }
 
         public static object Evaluate(string source, params object[] args)
         {
@@ -32,45 +32,9 @@ namespace WJScriptParser
             {
                 var addedImports = args.Select(a => a.GetType().Namespace).Distinct();
                 var addedAssemblies = args.Select(a => a.GetType().GetTypeInfo().Assembly).Distinct();
-                var globals = new DynamicGlobals { args = args.Select(a => new let(a)).ToArray() };
+                var globals = new DynamicGlobals { args = args };
 
                 result = await EvaluateAsync(source, globals, addedImports, addedAssemblies);
-
-                for (int i = 0; i < args.Length; i++)
-                {
-                    var type = args[i].GetType();
-                    if (!type.GetTypeInfo().IsValueType || type.IsByRef)
-                    {
-                        if (globals.args[i].PropertyCount == 0)
-                        {
-                            args[i] = globals.args[i].Value;
-                        }
-                        else
-                        {
-                            var arg = globals.args[i].ToDynamic();
-                            if ((arg as IDictionary<string, object>).TryGetValue("Value", out var value))
-                            {
-                                args[i] = value;
-                            }
-                            else
-                            {
-                                foreach (var prop in arg as IDictionary<string, object>)
-                                {
-                                    var argField = type.GetRuntimeField(prop.Key);
-                                    if (argField == null)
-                                    {
-                                        var argProperty = type.GetRuntimeProperty(prop.Key);
-                                        argProperty.SetValue(args[i], prop.Value);
-                                    }
-                                    else
-                                    {
-                                        argField.SetValue(args[i], prop.Value);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
 
             if (result != null && result.GetType() == typeof(let))

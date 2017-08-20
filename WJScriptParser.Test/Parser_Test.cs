@@ -1,16 +1,24 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WJScriptParser.Test
 {
+    public class TestChildArgClass
+    {
+        public bool B { get; set; }
+    }
+
+    public class TestArgClass
+    {
+        public int X;
+        public int Y { get; set; }
+        public ICollection<TestChildArgClass> Children { get; set; }
+    }
+
     [TestClass]
     public class Parser_Test
     {
-        public class TestArgClass
-        {
-            public int X;
-            public int Y { get; set; }
-        }
-
         [TestMethod]
         public void Empty()
         {
@@ -57,8 +65,8 @@ return x + y;
         {
             var script =
 @"
-let x = args[0];
-let y = args[1];
+let x = (int)args[0];
+let y = (int)args[1];
 return x + y;
 ";
             var result = Parser.Evaluate(script, 1, 2);
@@ -80,8 +88,8 @@ return x + y;
         {
             var script =
 @"
-let x = args[0][""X""];
-let y = args[0][""Y""];
+let x = (args[0] as TestArgClass).X;
+let y = (args[0] as TestArgClass).Y;
 return x + y;
 ";
             var result = Parser.Evaluate(script, new TestArgClass { X = 1, Y = 2 });
@@ -97,14 +105,31 @@ return x + y;
             var globals = new TestArgClass { X = 1, Y = 2 };
             var script =
 @"
-let x = args[0][""X""];
-let y = args[0][""Y""];
-args[0][""X""] = x + y;
+let x = (args[0] as TestArgClass).X;
+let y = (args[0] as TestArgClass).Y;
+(args[0] as TestArgClass).X = x + y;
 ";
             var result = Parser.Evaluate(script, globals);
 
             Assert.IsNull(result);
             Assert.AreEqual(3, globals.X);
+        }
+
+        [TestMethod]
+        public void Object_Child_Params_Script_Update()
+        {
+            var globals = new TestArgClass
+            {
+                Children = new List<TestChildArgClass> { new TestChildArgClass { B = true }, new TestChildArgClass { B = true }, new TestChildArgClass { B = false } }
+            };
+            var script =
+@"
+(args[0] as TestArgClass).Children.ToList().ForEach(c => c.B = false);
+";
+            var result = Parser.Evaluate(script, globals);
+
+            Assert.IsNull(result);
+            Assert.IsTrue(globals.Children.All(c => !c.B));
         }
 
         [TestMethod]
