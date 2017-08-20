@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-    <Version>0.2.2</Version>
+    <Version>0.2.3</Version>
     <Authors>Wil Stead</Authors>
     <Company>Wil Stead</Company>
     <Description>A general-purpose scripting language implemented in C#</Description>
@@ -10,8 +10,8 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseUrl>https://github.com/WilStead/WJScript/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/WilStead/WJScript</PackageProjectUrl>
-    <AssemblyVersion>0.2.2.0</AssemblyVersion>
-    <FileVersion>0.2.2.0</FileVersion>
+    <AssemblyVersion>0.2.3.0</AssemblyVersion>
+    <FileVersion>0.2.3.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.4.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-    <PackageReference Include="UniversalVariable" Version="0.1.1" />
+    <PackageReference Include="UniversalVariable" Version="0.1.2" />
   </ItemGroup>
 
 </Project>
