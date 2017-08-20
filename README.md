@@ -30,4 +30,4 @@ Yes! [Pull requests](https://help.github.com/articles/about-pull-requests/) are 
 Please add unit tests for any new feature.
 
 ## Help! It's not working!
-Feel free to submit an [Issue](https://help.github.com/articles/about-issues/) if something isn't working right. Please refer to the [project wiki](https://github.com/WilStead/WJScript/wiki), as well as the [wiki for UniversalVariable](https://github.com/WilStead/UniversalVariable/wiki) to verify that your trouble is due to an actual bug, and not simply a design limitation of that library.
+Feel free to submit an [Issue](https://help.github.com/articles/about-issues/) if something isn't working right. Please refer to the [project wiki](https://github.com/WilStead/WJScript/wiki), as well as the [wiki for UniversalVariable](https://github.com/WilStead/UniversalVariable/wiki) to verify that your trouble is due to an actual bug, and not simply a design limitation of the libraries.
